@@ -1,0 +1,85 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'pedido';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+            form(action="#{siteUrl('pedidos')}" method="GET")
+                .row
+                    .col-md-3
+                        label.control-label Vehiculos
+                        select.chosen-select.form-control(id="vehiculo_id" name="vehiculo_id" data-placeholder="Seleccione un vehiculo")
+                            option(value="") Todos
+                            each vehiculo in vehiculos
+                                - if(vehiculo._id == vehiculo_selected)
+                                    option(value="#{vehiculo._id}" selected="selected")= vehiculo.matricula
+                                - else
+                                    option(value="#{vehiculo._id}")= vehiculo.matricula
+
+                    .col-md-3
+                        label.control-label Conductores
+                        select.chosen-select.form-control(id="usuario_id" name="usuario_id" data-placeholder="Seleccione un Conductor")
+                            option(value="") Todos
+                            each usuario in usuarios
+                                - if(usuario._id == usuario_selected)
+                                    option(value="#{usuario._id}" selected="selected")= usuario.name
+                                - else
+                                    option(value="#{usuario._id}")= usuario.name
+
+                    .col-md-3
+                        label.control-label Fecha del Pedido
+                        input.form-control(id="fecha" name="fecha" data-start_date="#{fecha_start}" data-end_date="#{fecha_end}" readonly="readonly" style="cursor: pointer;")
+
+
+                    .col-md-3
+                        ul.action-panel
+                            li
+                                button.primary-text
+                                    span.action-panel-icon.glyphicon.glyphicon-search
+                                    span.action-panel-text Buscar
+        
+
+            table.table.display.dataTable
+                thead
+                    tr
+                        th N&uacute;mero
+                        th Fecha
+                        th Vehiculo
+                        th Conductor
+                        th Meta
+                        th Estaci&oacute;n
+                        th Acciones
+                tbody
+                    each pedido in pedidos
+                        tr
+                            td= pedido.numero
+                            td= date.format(pedido.fecha, 'DD/MM/YYYY')
+                            td= pedido.vehiculo.matricula
+                            td= pedido.conductor ? pedido.conductor.name : 'Sin Nombre'
+                            td= pedido.meta.codigo
+                            td= pedido.estacion ? pedido.estacion.nombre : ''
+
+                            td.action-table
+                                a.btn.btn-default.btn-xs(href="#{siteUrl('pedidos/mostrar/' + pedido._id)}")
+                                    span.glyphicon.glyphicon-th-list
+
+block content_css
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/jquery.dataTables.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/dataTables.bootstrap.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/chosen/chosen.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/chosen-bootstrap/chosen.bootstrap.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("js/daterangepicker/daterangepicker.css")}')
+
+block content_js
+    script(src="#{siteUrl('bower_components/datatables/media/js/jquery.dataTables.min.js')}")
+    script(src="#{siteUrl('bower_components/datatables/media/js/dataTables.bootstrap.min.js')}")
+    script(src="#{siteUrl('bower_components/chosen/chosen.jquery.min.js')}")
+    script(src="#{siteUrl('js/daterangepicker/moment.min.js')}")
+    script(src="#{siteUrl('js/daterangepicker/daterangepicker.js')}")
+    script(src="#{siteUrl('js/daterangepicker-options.js')}")
+    script
+        include index.js

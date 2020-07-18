@@ -1,0 +1,58 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'meta';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+
+            form.form-horizontal(action="#{siteUrl('metas/guardar/')}#{meta && meta._id != undefined ? meta._id : ''}" method="POST")
+                .form-group
+                    .col-md-6
+                        span.error-validation= error ? error.message : ''
+                    .col-md-6
+                        ul.action-panel
+                            li
+                                a.danger-text(href="#{siteUrl('metas')}")
+                                    span.action-panel-icon.glyphicon.glyphicon-remove
+                                    span.action-panel-text Atras
+                            li
+                                button.success-text(href="#{siteUrl('metas/nuevo')}")
+                                    span.action-panel-icon.glyphicon.glyphicon-ok
+                                    span.action-panel-text Guardar
+
+                .form-group(id="codigo_block")
+                    .col-md-3
+                    label.col-md-2(for="codigo") Codigo
+                    .col-md-4
+                        input.form-control.field-required(type="text" id="codigo" name="codigo" value="#{meta ? meta.codigo : ''}")
+                        span.error-validation(id="codigo_error")
+
+                .form-group(id="descripcion_block")
+                    .col-md-3
+                    label.col-md-2(for="descripcion") Descripci&oacute;n
+                    .col-md-4
+                        input.form-control.field-required(type="text" id="descripcion" name="descripcion" value="#{meta ? meta.descripcion : ''}")
+                        span.error-validation(id="descripcion_error")
+
+                .form-group(id="status_block")
+                    .col-md-3
+                    label.col-md-2(for="status") Estado
+                    .col-md-4
+                        select.form-control.field-required(id="status" name="status")
+                            option(value="")
+                            each estado in estados
+                                - if (meta && meta.status === estado.id)
+                                    option(value="#{estado.id}" selected="selected")= estado.value
+                                - else
+                                    option(value="#{estado.id}")= estado.value
+                        span.error-validation(id="status_error")
+
+
+
+block content_js
+    script
+        include form.js

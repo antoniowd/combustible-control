@@ -1,0 +1,72 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'vehiculo';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+            .row
+                .col-md-6.table-legend
+                    h4 Leyenda
+                    .label.label-success(data-toggle="tooltip" data-placement="top" title="Falta mas de 30 dias para el vencimiento del SOAT") Fecha SOAT
+                    .label.label-warning(data-toggle="tooltip" data-placement="top" title="Falta menos de 30 dias para el vencimiento del SOAT") Fecha SOAT
+                    .label.label-danger(data-toggle="tooltip" data-placement="top" title="El SOAT esta vencido") Fecha SOAT
+
+                .col-md-6
+                    ul.action-panel
+                        li
+                            a.info-text(href="#{siteUrl('vehiculos/nuevo')}")
+                                span.action-panel-icon.glyphicon.glyphicon-plus-sign
+                                span.action-panel-text Nuevo Vehiculo
+        
+
+            table.table.display.dataTable
+                thead
+                    tr
+                        th Matricula
+                        th Tipo
+                        th Consumo
+                        th Combustible
+                        th Km Inicial
+                        th SOAT
+                        th Estado
+                        th Acciones
+                tbody
+                    each vehiculo in vehiculos
+                        - var diff_date = date.subtract(vehiculo.fecha_soat, new Date()).toDays()
+                        tr
+                            td= vehiculo.matricula
+                            td
+                                span= selection.getTipoVehiculo(vehiculo.tipo_vehiculo).value
+                            td
+                                - if(selection.getTipoVehiculo(vehiculo.tipo_vehiculo).tipo_consumo == 'KM')
+                                    span= 'Ciudad: ' + vehiculo.consumo_ciudad + ' KM/GL'
+                                    br
+                                    span= 'Carretera: ' + vehiculo.consumo_carretera + ' KM/GL'
+                                - else
+                                    span= 'Por Hora: ' + vehiculo.consumo_ciudad + ' GL/HR'
+                            td= selection.getTipoCombustible(vehiculo.tipo_combustible).value
+                            td= vehiculo.km + ' KM'
+                            td
+                                span(class=diff_date <= 0 && "label label-danger" class=diff_date <= 30 && "label label-warning" class=diff_date > 30 && "label label-success")= date.format(vehiculo.fecha_soat, 'DD/MM/YYYY')
+                            td= selection.getEstados(vehiculo.status).value
+
+                            td.action-table
+                                a.btn.btn-default.btn-xs(href="#{siteUrl('vehiculos/editar/' + vehiculo._id)}")
+                                    span.glyphicon.glyphicon-edit
+                                - if(vehiculo.status != 0)
+                                    a.btn.btn-default.btn-xs.confirm-action(href="#{siteUrl('vehiculos/eliminar/' + vehiculo._id)}")
+                                        span.glyphicon.glyphicon-trash
+
+block content_css
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/jquery.dataTables.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/dataTables.bootstrap.min.css")}')
+
+block content_js
+    script(src="#{siteUrl('bower_components/datatables/media/js/jquery.dataTables.min.js')}")
+    script(src="#{siteUrl('bower_components/datatables/media/js/dataTables.bootstrap.min.js')}")
+    script
+        include index.js

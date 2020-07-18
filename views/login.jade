@@ -1,0 +1,48 @@
+doctype
+html
+    head
+        title FUEL MK CARS
+
+        meta(charset='utf-8')
+        meta(name='viewport' content="width=device-width, initial-scale=1")
+        link(rel='stylesheet', href='#{siteUrl("bower_components/bootstrap/dist/css/bootstrap.min.css")}')
+        link(rel='stylesheet', href='#{siteUrl("css/main.css")}')
+        block content_css
+
+    body.container(style="padding-top: 70px;")
+        input(type="hidden" id="site_url" value="#{siteUrl()}")
+
+        .container-fluid(style="width: 350px;")
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title FUEL MK CARS - Acceso
+                .panel-body
+
+                    form.form-horizontal(action="#{siteUrl('login/auth_operador')}" method="POST")
+                        .form-group(id="username_block")
+                            .col-md-12
+                                .input-group
+                                    .input-group-addon
+                                        span.glyphicon.glyphicon-user
+                                    input.form-control.field-required(type="text" id="username" name="username" value="#{usuario ? usuario.username : ''}" placeholder="Usuario")
+                                span.error-validation(id="username_error")
+
+                        .form-group(id="password_block")
+                            .col-md-12
+                                .input-group
+                                    .input-group-addon
+                                        span.glyphicon.glyphicon-asterisk
+                                    input.form-control.field-required(type="password" id="password" name="password" value="" placeholder="Contraseña")
+                                span.error-validation(id="password_error")
+
+                        .form-group
+                            .col-md-12.text-center(style="padding-top: 10px;")
+                                input.btn.btn-success(type="submit" value="Entrar" style="width: 50%;")
+                    div.text-left
+                        label(style="color: #888888; font-size: 0.7em;") Acceso solo para operadores
+
+
+
+    script(src='#{siteUrl("bower_components/jquery/dist/jquery.min.js")}')
+    script(src='#{siteUrl("bower_components/bootstrap/dist/js/bootstrap.min.js")}')
+    script(src='#{siteUrl("js/login.js")}')

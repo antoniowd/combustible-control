@@ -1,0 +1,94 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'usuario';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+
+            form.form-horizontal(action="#{siteUrl('usuarios/guardar/')}#{usuario && usuario._id != undefined ? usuario._id : ''}" method="POST")
+                .form-group
+                    .col-md-6
+                        span.error-validation= error ? error.message : ''
+                    .col-md-6
+                        ul.action-panel
+                            li
+                                a.danger-text(href="#{siteUrl('usuarios')}")
+                                    span.action-panel-icon.glyphicon.glyphicon-remove
+                                    span.action-panel-text Atras
+                            li
+                                button.success-text(href="#{siteUrl('usuarios/nuevo')}")
+                                    span.action-panel-icon.glyphicon.glyphicon-ok
+                                    span.action-panel-text Guardar
+
+                .form-group(id="name_block")
+                    .col-md-3
+                    label.col-md-2(for="name") Nombre
+                    .col-md-4
+                        input.form-control.field-required(type="text" id="name" name="name" value="#{usuario ? usuario.name : ''}")
+                        span.error-validation(id="name_error")
+
+                .form-group(id="username_block")
+                    .col-md-3
+                    label.col-md-2(for="username") Usuario
+                    .col-md-4
+                        - if(usuario && usuario.role == 'Admin')
+                            input.form-control.field-required(type="text" readonly='readonly' id="username_admin" name="username" value="#{usuario.username}")
+                        - else
+                            input.form-control.field-required(type="text" id="username" name="username" value="#{usuario ? usuario.username : ''}")
+                            span.error-validation(id="username_error")
+
+                .form-group(id="password_block")
+                    .col-md-3
+                    label.col-md-2(for="password") Contrase&ntilde;a
+                    .col-md-4
+                        input.form-control.field-required(type="password" id="password" name="password" value="")
+                        span.error-validation(id="password_error")
+
+                .form-group(id="repeat_password_block")
+                    .col-md-3
+                    label.col-md-2(for="repeat_password") Repetir Contrase&ntilde;a
+                    .col-md-4
+                        input.form-control.field-required(type="password" id="repeat_password" name="repeat_password" value="")
+                        span.error-validation(id="repeat_password_error")
+
+                .form-group(id="role_block")
+                    .col-md-3
+                    label.col-md-2(for="role") Funci&oacute;n
+                    .col-md-4
+                        - if(usuario && usuario.role == 'Admin')
+                            input(type="text" readonly="readonly" class="form-control" name="role" value='Admin')
+                        - else
+                            select.form-control.field-required(id="role" name="role")
+                                option(value="")
+                                each role in roles
+                                    - if (usuario && usuario.role == role)
+                                        option(value="#{role}" selected="selected")= role
+                                    - else
+                                        option(value="#{role}")= role
+                            span.error-validation(id="role_error")
+
+                .form-group(id="status_block")
+                    .col-md-3
+                    label.col-md-2(for="status") Estado
+                    .col-md-4
+                        - if(usuario && usuario.role == 'Admin')
+                            input(type="text" readonly="readonly" class="form-control" name="status" value='1')
+                        - else
+                            select.form-control.field-required(id="status" name="status")
+                                option(value="")
+                                each estado in estados
+                                    - if (usuario && usuario.status === estado.id)
+                                        option(value="#{estado.id}" selected="selected")= estado.value
+                                    - else
+                                        option(value="#{estado.id}")= estado.value
+                            span.error-validation(id="status_error")
+
+
+
+block content_js
+    script
+        include form.js

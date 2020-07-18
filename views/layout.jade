@@ -1,0 +1,82 @@
+doctype
+html
+    head
+        title FUEL MK CARS
+
+        meta(charset='utf-8')
+        meta(name='viewport' content="width=device-width, initial-scale=1")
+        link(rel='stylesheet', href='#{siteUrl("bower_components/bootstrap/dist/css/bootstrap.min.css")}')
+        link(rel='stylesheet', href='#{siteUrl("css/main.css")}')
+        block content_css
+
+    body.container(style="padding-top: 70px;")
+        input(type="hidden" id="site_url" value="#{siteUrl()}")
+        block active_menu
+            - var active_item = ''
+
+        nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse.container
+            .container-fluid
+                .navbar-header
+                    button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#top-menu" aria-expanded="false")
+                        span.sr-only Navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href="#{siteUrl()}") FUEL MK CARS
+
+                .collapse.navbar-collapse(id="top-menu")
+                    ul.nav.navbar-nav
+                        li(class="#{active_item == 'vehiculo' ? 'active' : ''}")
+                            a(href='#{siteUrl("vehiculos")}') Vehiculos
+                        li(class="#{active_item == 'usuario' ? 'active' : ''}")
+                            a(href='#{siteUrl("usuarios")}') Usuarios
+                        li(class="#{active_item == 'estacion' ? 'active' : ''}")
+                            a(href='#{siteUrl("estaciones")}') Estaciones
+                        li(class="#{active_item == 'meta' ? 'active' : ''}")
+                            a(href='#{siteUrl("metas")}') Metas
+                        li(class="#{active_item == 'pedido' ? 'active' : ''}")
+                            a(href='#{siteUrl("pedidos")}') Pedidos
+                        li.dropdown(class="#{active_item == 'reporte' ? 'active' : ''}")
+                            a.dropdown-toggle(href='#' data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Reportes
+                                span.caret
+                            ul.dropdown-menu
+                                li
+                                    a(href='#{siteUrl("reportes/consumo/KM")}') Vehiculo Consumo (Kms)
+                                li
+                                    a(href='#{siteUrl("reportes/consumo/HORA")}') Vehiculo Consumo (Horas)
+                                li.divider(role="separator")
+                                    li
+                                        a(href='#{siteUrl("reportes/conductor")}') Conductor Gasto
+                                li.divider(role="separator")
+                                li
+                                    a(href='#{siteUrl("reportes/meta")}') Meta Gasto
+
+                    ul.nav.navbar-nav.navbar-right
+                        li.dropdown
+                            a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") #{user_name}
+                                span.caret(style="margin-left: 5px;")
+                            ul.dropdown-menu
+                                li
+                                    a(href='#{siteUrl("logout")}') Salir
+
+
+
+        .container-fluid
+            block content
+
+        div(id="loading" style="display:none;")
+            img(src='#{siteUrl("img/loading.gif")}' style="width: 100px;")
+
+        div(id="loading_1" style="display:none;")
+            img(src='#{siteUrl("img/loading_1.gif")}')
+
+        .modal.fade(id="loading_modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true" style="text-align: center; padding-top: 80px;")
+            img(src='#{siteUrl("img/loading_1.gif")}')
+
+
+    script(src='#{siteUrl("bower_components/jquery/dist/jquery.min.js")}')
+    script(src='#{siteUrl("bower_components/bootstrap/dist/js/bootstrap.min.js")}')
+    script(src='#{siteUrl("bower_components/date-and-time/date-and-time.min.js")}')
+    script(defer, src="https://use.fontawesome.com/releases/v5.0.8/js/all.js")
+    script(src='#{siteUrl("js/app.js")}')
+    block content_js

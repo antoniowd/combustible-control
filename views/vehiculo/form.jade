@@ -1,0 +1,138 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'vehiculo';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+
+            form.form-horizontal(action="#{siteUrl('vehiculos/guardar/')}#{vehiculo && vehiculo._id != undefined ? vehiculo._id : ''}" method="POST")
+                .form-group
+                    .col-md-6
+                        span.error-validation= error ? error.message : ''
+                    .col-md-6
+                        ul.action-panel
+                            li
+                                a.danger-text(href="#{siteUrl('vehiculos')}")
+                                    span.action-panel-icon.glyphicon.glyphicon-remove
+                                    span.action-panel-text Atras
+                            li
+                                button.success-text(href="#{siteUrl('vehiculos/nuevo')}")
+                                    span.action-panel-icon.glyphicon.glyphicon-ok
+                                    span.action-panel-text Guardar
+
+                .form-group
+                    .col-md-6(id="matricula_block")
+                        .row
+                            label.col-md-5(for="matricula") Matricula
+                            .col-md-7
+                                input.form-control.field-required(type="text" id="matricula" name="matricula" value="#{vehiculo ? vehiculo.matricula : ''}")
+                                span.error-validation(id="matricula_error")
+
+                    .col-md-1
+
+                    .col-md-5(id="consumo_ciudad_block" style="display: none;")
+                        .row
+                            label.col-md-5(for="consumo_ciudad") Consumo Ciudad
+                            .col-md-5
+                                .input-group
+                                    input.form-control.field-required.field-numeric(type="text" id="consumo_ciudad" name="consumo_ciudad" value="#{vehiculo ? vehiculo.consumo_ciudad : ''}")
+                                    .input-group-addon.tipo_consumo_addon(id="consumo_ciudad_addon")
+                                span.error-validation(id="consumo_ciudad_error")
+
+
+                .form-group
+                    .col-md-6(id="tipo_vehiculo_block")
+                        .row
+                            label.col-md-5(for="tipo_vehiculo") Tipo de vehiculo
+                            .col-md-7
+                                select.form-control.field-required(id="tipo_vehiculo" name="tipo_vehiculo")
+                                    option(value="")
+                                    each tipo_vehiculo in tipo_vehiculos
+                                        - if (vehiculo && vehiculo.tipo_vehiculo == tipo_vehiculo.id)
+                                            option(value="#{tipo_vehiculo.id}" data-tipo_consumo="#{tipo_vehiculo.tipo_consumo}" selected="selected")= tipo_vehiculo.value
+                                        - else
+                                            option(value="#{tipo_vehiculo.id}" data-tipo_consumo="#{tipo_vehiculo.tipo_consumo}")= tipo_vehiculo.value
+                                span.error-validation(id="tipo_vehiculo_error")
+
+                    .col-md-1
+
+                    .col-md-5(id="consumo_carretera_block" style="display: none;")
+                        .row
+                            label.col-md-5(for="consumo_carretera") Consumo Carretera
+                            .col-md-5
+                                .input-group
+                                    input.form-control.field-required.field-numeric(type="text" id="consumo_carretera" name="consumo_carretera" value="#{vehiculo ? vehiculo.consumo_carretera : ''}")
+                                    .input-group-addon.tipo_consumo_addon(id="consumo_carretera_addon")
+                                span.error-validation(id="consumo_carretera_error")
+
+                .form-group
+                    .col-md-6(id="tipo_combustible_block")
+                        .row
+                            label.col-md-5(for="tipo_combustible") Tipo de combustible
+                            .col-md-7
+                                select.form-control.field-required(id="tipo_combustible" name="tipo_combustible")
+                                    option(value="")
+                                    each tipo_combustible in tipo_combustibles
+                                        - if (vehiculo && vehiculo.tipo_combustible == tipo_combustible.id)
+                                            option(value="#{tipo_combustible.id}" selected="selected")= tipo_combustible.value
+                                        - else
+                                            option(value="#{tipo_combustible.id}")= tipo_combustible.value
+                                span.error-validation(id="tipo_combustible_error")
+
+                    .col-md-1
+
+                    .col-md-5(id="km_block")
+                        .row
+                            label.col-md-5(for="km") Km Inicial
+                            .col-md-5
+                                .input-group
+                                    input.form-control.field-required.field-numeric(type="text" id="km" name="km" value="#{vehiculo ? vehiculo.km : ''}")
+                                    .input-group-addon(id="km_addon") KM
+                                span.error-validation(id="km_error")
+
+
+
+                .form-group
+                    .col-md-6(id="fecha_soat_block")
+                        .row
+                            label.col-md-5(for="fecha_soat") Vencimiento SOAT
+                            .col-md-7
+                                input.form-control.field-required(type="text" id="fecha_soat" name="fecha_soat" style="cursor: pointer;" readonly="readonly" value="#{vehiculo ? date.format(new Date(vehiculo.fecha_soat), 'DD/MM/YYYY') : ''}")
+                                span.error-validation(id="fecha_soat_error")
+
+                    .col-md-1
+
+                    .col-md-5(id="status_block")
+                        .row
+                            label.col-md-5(for="status") Estado
+                            .col-md-5
+                                select.form-control.field-required(id="status" name="status")
+                                    option(value="")
+                                    each estado in estados
+                                        - if (vehiculo && vehiculo.status === estado.id)
+                                            option(value="#{estado.id}" selected="selected")= estado.value
+                                        - else
+                                            option(value="#{estado.id}")= estado.value
+                                span.error-validation(id="status_error")
+
+
+
+
+
+
+
+
+block content_css
+    link(rel='stylesheet', href='#{siteUrl("bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css")}')
+
+
+
+block content_js
+    script(src='#{siteUrl("bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js")}')
+    script(src='#{siteUrl("bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js")}')
+    script
+        include form.js

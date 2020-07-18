@@ -1,0 +1,108 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'pedido';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+            .row
+                .col-md-6.table-legend
+
+                .col-md-6
+                    ul.action-panel
+                        li
+                            - if(role === 'Admin')
+                                a.danger-text(href="#" id="delete_pedido" data-id="#{pedido._id}")
+                                    span.action-panel-icon.glyphicon.glyphicon-trash
+                                    span.action-panel-text Eliminar
+                            a.info-text(href="javascript:history.back(1)")
+                                span.action-panel-icon.glyphicon.glyphicon-arrow-left
+                                span.action-panel-text Atras
+
+
+            table.table
+                tbody
+                    tr
+                        th N&uacute;mero
+                        td= pedido.numero
+                        th Fecha
+                        td= date.format(pedido.fecha, 'DD/MM/YYYY')
+                    tr
+                        th Veh&iacute;culo
+                        td= pedido.vehiculo.matricula + ' (' + selection.getTipoVehiculo(pedido.vehiculo.tipo_vehiculo).value + ')'
+                        th Estaci&oacute;n
+                        td= pedido.estacion ? pedido.estacion.nombre : ''
+                    tr
+                        th Conductor
+                        td= pedido.conductor ? pedido.conductor.name : 'Sin Nombre'
+                        th Meta
+                        td= pedido.meta.codigo
+                    tr
+                        th Kil&oacute;metros
+                        td= pedido.km
+                        th Total declarado
+                        td= pedido.total_declarado
+
+            table.table
+                thead
+                    tr
+                        th Cantidad
+                        th Unidad
+                        th Detalle
+                        th Precio
+                        th Total Importe
+                tbody
+                    tr
+                        td= pedido.cantidad
+                        td Galones
+                        td= selection.getTipoCombustible(pedido.vehiculo.tipo_combustible).value
+                        td= 'S/ ' + pedido.precio
+                        td= 'S/ ' + parseFloat(pedido.cantidad * pedido.precio).toFixed(2)
+
+            h4 Declaraciones
+            table.table
+                thead
+                    tr
+                        th Fecha
+                        th= selection.getTipoVehiculo(pedido.vehiculo.tipo_vehiculo).tipo_consumo == 'KM' ? 'Ciudad | Carretera (KM)' : 'Horas Trabajadas'
+                        th Subtotal
+                tbody
+                    each declaracion in pedido.declaraciones
+                        tr
+                            td= date.format(declaracion.fecha, 'DD/MM/YYYY HH:mm')
+                            td= selection.getTipoVehiculo(pedido.vehiculo.tipo_vehiculo).tipo_consumo == 'KM' ? declaracion.km_ciudad + ' | ' + declaracion.km_carretera : declaracion.km_ciudad
+                            td= declaracion.km_ciudad + declaracion.km_carretera
+
+
+            h4 Imagenes
+            .row
+                .col-md-6.text-center
+                    h5 Nota de Pedido
+                    a(href="#" id="show_pedido")
+                        img(src="data:image/jpg;base64,#{pedido.nota_pedido_base64}")
+
+                .col-md-5.text-center
+                    h5 Od&oacute;metro
+                    a(href="#" id="show_odometro")
+                        img(src="data:image/jpg;base64,#{pedido.odometro_base64}")
+
+            .modal.fade(id="imagen_modal" tabindex="-1" role="dialog")
+                .modal-dialog(role="document" style="width: 600px")
+                    .modal-content
+                        .modal-header
+                            button.close(type="button" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                            h4.modal-title(id="imagen_titulo")
+                        .modal-body.text-center(id="imagen_contenido")
+
+
+
+
+block content_js
+    script(src="#{siteUrl('bower_components/datatables/media/js/jquery.dataTables.min.js')}")
+    script(src="#{siteUrl('bower_components/datatables/media/js/dataTables.bootstrap.min.js')}")
+    script
+        include index.js

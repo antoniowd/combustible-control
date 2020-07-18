@@ -1,0 +1,53 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'estacion';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+            .row
+                .col-md-6.table-legend
+
+                .col-md-6
+                    ul.action-panel
+                        li
+                            a.info-text(href="#{siteUrl('estaciones/nuevo')}")
+                                span.action-panel-icon.glyphicon.glyphicon-plus-sign
+                                span.action-panel-text Nueva Estaci&oacute;n
+        
+
+            table.table.display.dataTable
+                thead
+                    tr
+                        th Nombre
+                        th Estado
+                        th Direcci&oacute;n
+                        th Modificado
+                        th Acciones
+                tbody
+                    each estacion in estaciones
+                        tr
+                            td= estacion.nombre
+                            td= selection.getEstados(estacion.status).value
+                            td= estacion.dir ? estacion.dir : ''
+                            td= date.format(estacion.updated, 'DD/MM/YYYY')
+
+                            td.action-table
+                                a.btn.btn-default.btn-xs(href="#{siteUrl('estaciones/editar/' + estacion._id)}")
+                                    span.glyphicon.glyphicon-edit
+                                - if(estacion.status != 0)
+                                    a.btn.btn-default.btn-xs.confirm-action(href="#{siteUrl('estaciones/eliminar/' + estacion._id)}")
+                                        span.glyphicon.glyphicon-trash
+
+block content_css
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/jquery.dataTables.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/dataTables.bootstrap.min.css")}')
+
+block content_js
+    script(src="#{siteUrl('bower_components/datatables/media/js/jquery.dataTables.min.js')}")
+    script(src="#{siteUrl('bower_components/datatables/media/js/dataTables.bootstrap.min.js')}")
+    script
+        include index.js

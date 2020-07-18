@@ -1,0 +1,53 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'meta';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title #{title}
+        .panel-body
+            .row
+                .col-md-6.table-legend
+
+                .col-md-6
+                    ul.action-panel
+                        li
+                            a.info-text(href="#{siteUrl('metas/nuevo')}")
+                                span.action-panel-icon.glyphicon.glyphicon-plus-sign
+                                span.action-panel-text Nueva Meta
+        
+
+            table.table.display.dataTable
+                thead
+                    tr
+                        th C&oacute;digo
+                        th Descripci&oacute;n
+                        th Estado
+                        th Modificado
+                        th Acciones
+                tbody
+                    each meta in metas
+                        tr
+                            td= meta.codigo
+                            td= meta.descripcion
+                            td= selection.getEstados(meta.status).value
+                            td= date.format(meta.updated, 'DD/MM/YYYY')
+
+                            td.action-table
+                                a.btn.btn-default.btn-xs(href="#{siteUrl('metas/editar/' + meta._id)}")
+                                    span.glyphicon.glyphicon-edit
+                                - if(meta.status != 0)
+                                    a.btn.btn-default.btn-xs.confirm-action(href="#{siteUrl('metas/eliminar/' + meta._id)}")
+                                        span.glyphicon.glyphicon-trash
+
+block content_css
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/jquery.dataTables.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/datatables/media/css/dataTables.bootstrap.min.css")}')
+
+block content_js
+    script(src="#{siteUrl('bower_components/datatables/media/js/jquery.dataTables.min.js')}")
+    script(src="#{siteUrl('bower_components/datatables/media/js/dataTables.bootstrap.min.js')}")
+    script
+        include index.js

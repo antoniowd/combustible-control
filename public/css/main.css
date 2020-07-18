@@ -1,0 +1,117 @@
+.table-legend .label {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.action-table a {
+    margin-right: 5px;
+}
+
+.action-table {
+    min-width: 120px;
+}
+
+.action-panel {
+    overflow: hidden;
+    display: block;
+    padding-left: 0;
+    list-style: none;
+}
+
+.action-panel a, .action-panel button {
+    min-width: 80px;
+    padding: 0px 10px;
+    font-size: 12px;
+    float: right;
+    margin: 5px;
+    line-height: 1.4;
+    text-align: center;
+    border: 1px solid #fff;
+    background: transparent;
+}
+
+.action-panel a:hover, .action-panel button:hover {
+    text-decoration: none;
+    border: 1px solid #ddd;
+}
+
+.action-panel .action-panel-icon {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 35px;
+}
+
+.action-panel .action-panel-text {
+    display: block;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.header-panel a {
+    margin-left: 15px;
+}
+
+.header-panel a:hover {
+    text-decoration: none;
+}
+
+.header-panel a span {
+    padding-left: 2px;
+}
+
+.label-form {
+    font-size: 1.2em;
+}
+
+.error-validation {
+    color: #c9302c;
+    font-size: 0.8em;
+}
+
+.default-text {
+    color: #8c8c8c;
+}
+
+.default-text:hover {
+    color: #777;
+}
+
+.primary-text {
+    color: #337ab7;
+}
+
+.primary-text:hover {
+    color: #23527c;
+}
+
+.success-text {
+    color: #5cb85c;
+}
+
+.success-text:hover {
+    color: #449d44;
+}
+
+.warning-text {
+    color: #f0ad4e;
+}
+
+.warning-text:hover {
+    color: #ec971f;
+}
+
+.danger-text {
+    color: #d9534f;
+}
+
+.danger-text:hover {
+    color: #c9302c;
+}
+
+.info-text {
+    color: #5bc0de;
+}
+
+.info-text:hover {
+    color: #31b0d5;
+}

@@ -1,0 +1,64 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'reporte';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            .row
+                h3.col-md-6.panel-title Reporte de Costo por Metas
+        .panel-body
+            form(action="#{siteUrl('reportes/meta')}" method="GET")
+                include filter.jade
+
+                - if(meta_list.length > 0)
+                    .row
+                        div.col-md-12.text-right.header-panel
+                            a(href="#" id="download_excel" data-filename="metas" data-toggle="tooltip" data-placement="top" title="Exportar a Excel")
+                                li.fas.fa-file-excel
+                                span Exportar Excel
+                            a(href="#" id="download_pdf" data-filename="metas" data-toggle="tooltip" data-placement="top" title="Exportar a Pdf")
+                                li.fas.fa-file-pdf
+                                span Exportar Pdf
+
+            table.table.table-bordered.table-striped.table-condensed(id="table")
+                thead
+                    tr
+                        th Código
+                        th Nombre de la Meta
+                        th Pedidos
+                        th(style="white-space: nowrap") Combustible (Gl)
+                        th(style="white-space: nowrap") Costo (S/)
+                        th Costo/Gl
+                tbody
+                    each meta in meta_list
+                        tr
+                            td= meta.codigo
+                            td= meta.descripcion
+                            td= meta.cantidad_pedidos
+                            td(style="white-space: nowrap")= meta.cantidad_recarga.toFixed(2) + ' Gls'
+                            td(style="white-space: nowrap")= 'S/ ' + meta.costo.toFixed(2)
+                            td= meta.costo != 0 ? parseFloat(meta.costo / meta.cantidad_recarga).toFixed(2) : 0
+                tfoot
+                    tr
+                        th(colspan="2") TOTALES
+                        th= total.total_pedidos
+                        th= total.cantidad.toFixed(2) + ' Gls'
+                        th= 'S/ ' + total.costo.toFixed(2)
+                        th= total.costo != 0 ? parseFloat(total.costo / total.cantidad).toFixed(2) : 0
+
+
+block content_css
+    link(rel='stylesheet', href='#{siteUrl("bower_components/chosen/chosen.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/chosen-bootstrap/chosen.bootstrap.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("js/daterangepicker/daterangepicker.css")}')
+
+block content_js
+    script(src="#{siteUrl('bower_components/chosen/chosen.jquery.min.js')}")
+    script(src="#{siteUrl('js/daterangepicker/moment.min.js')}")
+    script(src="#{siteUrl('js/daterangepicker/daterangepicker.js')}")
+    script(src="#{siteUrl('js/daterangepicker-options.js')}")
+    script(src="#{siteUrl('bower_components/html2pdf.js/dist/html2pdf.bundle.min.js')}")
+    script
+        include index.js

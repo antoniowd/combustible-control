@@ -1,0 +1,66 @@
+extend ../layout
+
+block active_menu
+    - var active_item = 'reporte';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title Reporte de Consumo por Hora
+        .panel-body
+            form(action="#{siteUrl('reportes/consumo/HORA')}" method="GET")
+                include filter.jade
+
+                - if(vehiculos.length > 0)
+                    .row
+                        div.col-md-12.text-right.header-panel
+                            a(href="#" id="download_excel" data-filename="Consumo horas" data-toggle="tooltip" data-placement="top" title="Exportar a Excel")
+                                li.fas.fa-file-excel
+                                span Exportar Excel
+                            a(href="#" id="download_pdf" data-filename="Consumo horas" data-toggle="tooltip" data-placement="top" title="Exportar a Pdf")
+                                li.fas.fa-file-pdf
+                                span Exportar Pdf
+        
+            table.table.table-bordered.table-striped.table-condensed(id="table")
+                thead
+                    tr
+                        th Vehiculo
+                        th(style="white-space: nowrap") Combustible (Gl)
+                        th(style="white-space: nowrap") Costo (S/)
+                        th Costo/Gl
+                        th(style="white-space: nowrap") Consumo Total
+                        th(style="white-space: nowrap") Media Consumo
+                        th(style="white-space: nowrap") Declarado
+                tbody
+                    each vehiculo in vehiculos
+                        - var tipo_consumo = selection.getTipoVehiculo(vehiculo.tipo_vehiculo).tipo_consumo
+                        tr
+                            td= vehiculo.matricula
+                            td(style="white-space: nowrap")= vehiculo.cantidad_recarga.toFixed(2) + ' Gls'
+                            td(style="white-space: nowrap")= 'S/ ' + vehiculo.costo.toFixed(2)
+                            td= vehiculo.costo != 0 ? parseFloat(vehiculo.costo / vehiculo.cantidad_recarga).toFixed(2) : 0
+                            td(style="white-space: nowrap")= (vehiculo.km_recorrido != 0 ? parseFloat(vehiculo.km_ciudad * vehiculo.cantidad_recarga).toFixed(0) : 0) + ' Horas'
+                            td(style="white-space: nowrap")= vehiculo.km_ciudad + ' Gls/Hora'
+                            td(style="white-space: nowrap")= vehiculo.total_declarado + ' Horas'
+                tfoot
+                    tr
+                        th TOTALES
+                        th= total.cantidad.toFixed(2) + ' Gls'
+                        th= 'S/ ' + total.costo.toFixed(2)
+                        th= total.costo != 0 ? parseFloat(total.costo / total.cantidad).toFixed(2) : 0
+                        th(colspan="3")
+
+
+block content_css
+    link(rel='stylesheet', href='#{siteUrl("bower_components/chosen/chosen.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("bower_components/chosen-bootstrap/chosen.bootstrap.min.css")}')
+    link(rel='stylesheet', href='#{siteUrl("js/daterangepicker/daterangepicker.css")}')
+
+block content_js
+    script(src="#{siteUrl('bower_components/chosen/chosen.jquery.min.js')}")
+    script(src="#{siteUrl('js/daterangepicker/moment.min.js')}")
+    script(src="#{siteUrl('js/daterangepicker/daterangepicker.js')}")
+    script(src="#{siteUrl('js/daterangepicker-options.js')}")
+    script(src="#{siteUrl('bower_components/html2pdf.js/dist/html2pdf.bundle.min.js')}")
+    script
+        include index.js

@@ -1,0 +1,12 @@
+extend ./layout
+
+block active_menu
+    - var active_item = '';
+
+block content
+    .panel.panel-primary
+        .panel-heading
+            h3.panel-title Error del Sistema
+        .panel-body
+            h3.text-center Error Interno
+            p.text-center.danger-text= error.message

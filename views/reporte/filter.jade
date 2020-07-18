@@ -1,0 +1,44 @@
+.row
+    .col-md-2
+        label.control-label Vehiculos
+        select.chosen-select.form-control(id="vehiculo_id" name="vehiculo_id" data-placeholder="Seleccione un vehiculo")
+            option(value="") Todos
+            each vehiculo in vehiculos
+                - if(vehiculo._id == vehiculo_selected)
+                    option(value="#{vehiculo._id}" selected="selected")= vehiculo.matricula
+                - else
+                    option(value="#{vehiculo._id}")= vehiculo.matricula
+
+    .col-md-2
+        label.control-label Metas
+        select.chosen-select.form-control(id="meta_id" name="meta_id" data-placeholder="Seleccione una meta")
+            option(value="") Todos
+            each meta in metas
+                - if(meta._id == meta_selected)
+                    option(value="#{meta._id}" selected="selected")= meta.codigo
+                - else
+                    option(value="#{meta._id}")= meta.codigo
+
+    .col-md-3
+        label.control-label Conductores
+        select.chosen-select.form-control(id="usuario_id" name="usuario_id" data-placeholder="Seleccione un conductor")
+            option(value="") Todos
+            each usuario in usuarios
+                - if(usuario._id == usuario_selected)
+                    option(value="#{usuario._id}" selected="selected")= usuario.name
+                - else
+                    option(value="#{usuario._id}")= usuario.name
+
+    .col-md-3
+        label.control-label Fecha del Pedido
+        input.form-control(id="fecha" name="fecha" data-start_date="#{fecha_start}" data-end_date="#{fecha_end}" readonly="readonly" style="cursor: pointer;")
+
+
+    .col-md-2
+        ul.action-panel
+            li
+                button.primary-text
+                    span.action-panel-icon.glyphicon.glyphicon-search
+                    span.action-panel-text Buscar
+
+
